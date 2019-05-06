@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <title>Science Forecast</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.min.js"></script>
+      <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="/static/js/Chart.min.js"></script>
+  </head>
+  <body>
+  <div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/"><img src="/static/img/sforecast-logo.png" alt="Science Forecast">
+          </a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/about">О проекте</a></li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    <!--/.container-fluid -->
+    </nav>
+    {% block title_text %}
+        
+    {% endblock title_text %}
+
+    {%block content%}
+
+    {%endblock content%}
+
+
+    <footer>
+      <p>&copy; 2019, <a href="#">ScienceForecast.ru</a></p>
+    </footer>
+  </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>

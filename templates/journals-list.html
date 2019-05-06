@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title_text %}
+    <div>
+      <ol class="breadcrumb">
+        <li><a href="{{url_for('list_super_domains')}}">All primary domains</a></li>
+        <li><a href="{{url_for('list_domains', primary_domain_url=super_domain['url'])}}">{{super_domain['name']}}</a></li>
+        <li><a href="{{url_for('list_subdomains', super_domain_url=super_domain['url'], domain_url=domain['url'])}}">{{domain['name']}}</a></li>
+        <li class="active"><a href="{{url_for('subdomain_view', super_domain_url=super_domain['url'], domain_url=domain['url'], subdomain_url=subdomain['url'])}}">{{subdomain['name']}}</a></li>
+      </ol>
+  </div>
+    <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading lead">Выберите интересующий журнал</div>
+{% endblock title_text %}
+{% block content %}
+
+    <table class="table">
+          <tbody>
+            {% for journal in list_of %}
+              {% if loop.index % 3 == 1 %}
+              <tr>
+              {% endif %}
+                <td width="33%">
+                    <a href="{{url_for('subdomain_view', super_domain_url=super_domain['url'], domain_url=domain['url'], subdomain_url=subdomain['url'])}}/{{journal}}">
+                        {{list_of[journal]}}
+                    </a>
+                </td>
+              {% if loop.last and loop.index % 3 == 1 %}
+                <td width="33%">&nbsp;</td>
+                <td width="33%">&nbsp;</td>
+              </tr>
+              {% endif %}
+              {% if loop.last and loop.index % 3 == 2 %}
+                <td width="33%">&nbsp;</td>
+              </tr>
+              {% endif %}
+              {% if loop.index % 3 == 0 %}
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+{% endblock content %}

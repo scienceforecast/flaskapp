@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title_text %}
+  <div>
+      <ol class="breadcrumb">
+        <li><a href="{{url_for('list_super_domains')}}">All primary domains</a></li>
+        <li><a href="{{url_for('list_domains', primary_domain_url=super_domain['url'])}}">{{super_domain['name']}}</a></li>
+        <li><a href="{{url_for('list_subdomains', super_domain_url=super_domain['url'], domain_url=domain['url'])}}">{{domain['name']}}</a></li>
+        <li><a href="{{url_for('subdomain_view', super_domain_url=super_domain['url'], domain_url=domain['url'], subdomain_url=subdomain['url'])}}">{{subdomain['name']}}</a></li>
+        <li class="active"><a href="{{url_for('list_subdomains', super_domain_url=super_domain['url'], domain_url=domain['url'])}}/{{journal['url']}}">{{journal['name']}}</a></li>
+      </ol>
+  </div>
+  <div class="panel-heading lead">График популярности словосочетаний для журнала {{journal['name']}}</div>
+{% endblock title_text %}
+
+
+{% block content %}
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        Построить график за период с &nbsp;
+        <select class="browser-default custom-select" id="start_of_slice", onchange="start_changed(this.value)">
+          <option selected>2010</option>
+          <option value="2011">2011</option>
+          <option value="2012">2012</option>
+          <option value="2013">2013</option>
+          <option value="2014">2014</option>
+          <option value="2015">2015</option>
+          <option value="2016">2016</option>
+          <option value="2017">2017</option>
+          <option value="2018">2018</option>
+        </select>
+      </div>
+      <div class="form-group">
+      <div class="form-group">
+        &nbsp;по&nbsp;
+        <select class="browser-default custom-select" id="end_of_slice" onchange="end_changed(this.value)">
+          <option value="2010">2010</option>
+          <option value="2011">2011</option>
+          <option value="2012">2012</option>
+          <option value="2013">2013</option>
+          <option value="2014">2014</option>
+          <option value="2015">2015</option>
+          <option value="2016">2016</option>
+          <option value="2017">2017</option>
+          <option value="2018" selected>2018</option>
+        </select>
+        </select>
+        год
+      </div>
+      &nbsp;
+      <button type="button" class="btn btn-success" id="slicer">Построить</button>
+      &nbsp;
+     <button type="button" class="btn btn-info" id="forecast">Квартальный прогноз на 2019 год</button> 
+    </form>
+    </div>
+    <br />
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Рейтинг самых частотных словосочетаний в аннотациях статей журнала за период с 2010 по 2018 гг.</h3>
+      </div>
+      <div class="panel-body">
+        <canvas id="myChart" width="1600" height="900"></canvas>
+      </div>
+    </div>
+  </div>
+    <script type="text/javascript">
+
+      var labels_list_output = [{%for year in output.pop('years') %} '{{year}}',{% endfor %}];
+
+      function start_changed(start_value) {
+        var ending = document.getElementById("end_of_slice")
+        for (var i = 0; i<ending.childNodes.length; i++){
+          if (typeof ending.childNodes[i].value !== "undefined") {
+            s = +ending.childNodes[i].value
+            sv = +start_value 
+            if (s < sv) {
+              ending.childNodes[i].style.display = "none"}
+            else {
+              ending.childNodes[i].style.display = "block"
+            };
+          };
+        };
+      };
+      var forecast_data = ["1", "2", "3", "4", "5",];
+      function end_changed(end_value) {
+        var starting = document.getElementById("start_of_slice")
+        for (var i = 0; i<starting.childNodes.length; i++){
+          if (typeof starting.childNodes[i].value !== "undefined") {
+            s = +starting.childNodes[i].value
+            sv = +end_value 
+            if (s > sv) {
+              starting.childNodes[i].style.display = "none"}
+            else {
+              starting.childNodes[i].style.display = "block"
+            };
+          };
+        };
+      };
+      var data_range = [0, labels_list_output.indexOf('2018')+1];
+      var labels_list = labels_list_output.slice(data_range[0], data_range[1]);
+      var base_config = {
+        type: 'line',
+        data: {
+          labels: labels_list,
+          datasets:[
+            
+            {% for collocation in output %}
+              {
+                data: [{%for records in output[collocation]['records'] %} '{{records}}',{% endfor %}],
+                label: '{{collocation}}',
+                borderColor: '{{output[collocation]['color']}}',
+                fill: false
+              },
+            {%endfor%}
+          ]
+          }
+        };
+      var config = {
+        type: 'line',
+        data: {
+          labels: labels_list,
+          datasets:[
+            
+            {% for collocation in output %}
+              {
+                data: [{%for records in output[collocation]['records'] %} '{{records}}',{% endfor %}],
+                label: '{{collocation}}',
+                borderColor: '{{output[collocation]['color']}}',
+                fill: false
+              },
+            {%endfor%}
+          ]
+          }
+        };
+      
+      window.onload = function(){
+        var ctx = document.getElementById("myChart").getContext('2d');
+        window.myChart = new Chart(ctx, config); 
+      };
+      document.getElementById('slicer').addEventListener('click', function(){
+        var begin = document.getElementById('start_of_slice').value;
+        var end = document.getElementById('end_of_slice').value;
+        data_range[0] = labels_list_output.indexOf(begin);
+        data_range[1] = labels_list_output.indexOf(end) + 1;
+        config.data.labels = labels_list_output.slice(data_range[0], data_range[1]);
+        for (var i=0; i<config.data.datasets.length; i++){
+          config.data.datasets[i].data = base_config.data.datasets[i].data.slice(data_range[0], data_range[1]);
+        };
+        window.myChart.update();
+      });
+      document.getElementById("forecast").addEventListener('click', function(){
+        
+        config.data.labels = labels_list_output;
+        
+        // alert(config.data.labels);
+        for (var i=0; i<config.data.datasets.length; i++){
+          config.data.datasets[i].data = base_config.data.datasets[i].data
+
+          // alert(base_config.data.datasets[i].data.slice(0, labels_list_output.indexOf('2018')+1).push(forecast[i]))
+        };
+        window.myChart.update();
+      });
+    </script>
+{% endblock content %}

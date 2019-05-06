@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  
+
+    <div class="jumbotron" style="background-image: url(/static/img/jumbotron-back.jpg)">
+      <h2>Проект &laquo;Научное прогнозирование&raquo;</h2>
+      <hr>
+      <p>Мы собираем информацию о научных публикациях по всему миру и выбираем самые популярные темы по всем отраслям науки</p>
+      <a class="btn btn-success btn-lg" href="#" role="button">О проекте</a>
+    </div>
+    <h3>Выберите интересующий главный раздел науки</h3>
+    <div class="list-group">
+      <a href="{{url_for('list_super_domains')}}" class="list-group-item">Перейти к списку основных разделов</a>
+      
+    </div>
+{% endblock content %}
