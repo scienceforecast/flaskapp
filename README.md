@@ -1,5 +1,5 @@
-Web приложение scienceforecast.ru
-=================================
+Web приложение [scienceforecast.ru](http://scienceforecast.ru)
+==============================================================
 
 Данное приложение визуализирует результаты анализа абстрактов статей с сайта [sciencedirect.com](https://www.sciencedirect.com/).
 
