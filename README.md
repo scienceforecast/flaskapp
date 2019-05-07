@@ -7,7 +7,7 @@ Web приложение [scienceforecast.ru](http://scienceforecast.ru)
 
 1. Backend реалезован на фреймворке Flask
 2. База данных PostgreSQL:9.6 - запущенная в docker [предварительная работа с бд](https://github.com/krak1111/scienceforecastpostgres)
-3. Верстка сделано с помощью фреймворка Bootstrap
+3. Верстка сделана с помощью фреймворка Bootstrap
 4. Для построения графиков использовался фреймворк Chart.js
 
 
